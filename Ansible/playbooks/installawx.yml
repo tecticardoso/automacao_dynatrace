@@ -1,0 +1,46 @@
+---
+- name: Install AWX
+  hosts: localhost
+  become: yes
+
+  vars:
+    - tmpdir: "/tmp/ansible"
+
+  tasks:
+
+  - name: Update yum
+    yum:
+      name: '*'
+      state: latest
+
+  - name: Install Ansible
+    pip:
+      name: ansible
+      state: latest
+
+  - name: Install Repositories
+    yum:
+      name: "{{ item }}"
+    loop:
+      - git
+      - docker
+
+  - name: Start Docker
+    service:
+      name: docker
+      state: started
+
+  - name: Clone awx
+    git:
+      repo: 'https://github.com/ansible/awx.git'
+      dest: "{{ tmpdir }}"
+      clone: yes
+
+  - name: Install Docker Compose
+    pip:
+      name: docker-compose
+      state: latest
+
+  - name: Install AWX
+    command: /usr/local/bin/ansible-playbook -i {{ tmpdir }}/installer/inventory {{ tmpdir }}/installer/install.yml
+

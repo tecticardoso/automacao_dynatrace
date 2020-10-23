@@ -1,0 +1,6 @@
+---
+# defaults file for http
+
+  user: 'Ansible'
+  context: 'Ansible'
+

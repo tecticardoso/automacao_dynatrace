@@ -1,0 +1,73 @@
+---
+
+# HTTP status teste - Envio comentário PROBLEM Dyna
+
+- name: Check site Claro Brasil - Status 200
+  uri:
+    url: https://www.claro.com.br/
+
+- name: Check site NET - Status 200
+  uri:
+    url: https://www.net.com.br
+
+# Copia do Script Localmente 
+
+- name: Copia Arquivo de Configuracao - Properties
+  copy:
+    src: /etc/ansible/roles/restart_claro_satellite/files/prd-sat.clarowcs.cloud.properties
+    dest: /home/tmp/
+    owner: ec2-user
+    group: ec2-user
+    mode: preserve
+
+- name: Copia do Script - RestartWLS.py 
+  copy:
+    src: /etc/ansible/roles/restart_claro_satellite/files/restartWLS.py
+    dest: /home/tmp/
+
+    owner: ec2-user
+    group: ec2-user
+    mode: preserve
+
+# Execucao do Restart - Satellite Server 1
+
+- name: Execucao de Restart Gradual Weblogic Claro SAT - Satellite_Server1_Claro
+  command: /app/oracle/middleware//oracle_common/common/bin/wlst.sh /home/tmp/restartWLS.py /home/tmp/prd-sat.clarowcs.cloud  satellite_server1_claro &
+  become: yes
+  become_method: su
+  become_user: root
+  become_flags: '-s /bin/sh'
+
+# Execucao do Restart - Satellite Server 2
+
+- name: Execucao de Restart Gradual Weblogic Claro SAT - Satellite_Server2_Claro
+  command: /app/oracle/middleware//oracle_common/common/bin/wlst.sh /home/tmp/restartWLS.py /home/tmp/prd-sat.clarowcs.cloud  satellite_server2_claro &
+  become: yes
+  become_method: su
+  become_user: root
+  become_flags: '-s /bin/sh'
+
+# Execucao do Restart - Satellite Server 3
+
+- name: Execucao de Restart Gradual Weblogic Claro SAT - Satellite_Server3_Claro
+  command: /app/oracle/middleware//oracle_common/common/bin/wlst.sh /home/tmp/restartWLS.py /home/tmp/prd-sat.clarowcs.cloud  satellite_server3_claro &
+  become: yes
+  become_method: su
+  become_user: root
+  become_flags: '-s /bin/sh'
+
+
+# Excluir Scripts copiados Localmente
+
+- name: Exclusão Script Local - Properties
+  file: 
+    path: /home/tmp/prd-sat.clarowcs.cloud.properties
+    state: absent 
+
+- name: Exclusão Script Local - RestartWLS.py 
+  file:
+    path: /home/tmp/restartWLS.py
+    state: absent 
+             
+...
+
