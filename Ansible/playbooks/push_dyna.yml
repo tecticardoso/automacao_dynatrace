@@ -1,7 +1,0 @@
----
-
-- name: Push Dyna
-  hosts: localhost
-  roles:
-  - dynatrace_innovationlab.dynatrace_problem_comment
-

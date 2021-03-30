@@ -1,5 +1,0 @@
----
-- name: Restart Weblogic - Claro Satellite
-  hosts: clarosat
-  roles:
-  - restart_claro_satellite

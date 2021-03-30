@@ -1,6 +1,0 @@
----
-- name: Restart Weblogic - NET Satellite
-  hosts: netsat
-  roles:
-  - restart_net_satellite
-
